@@ -1,0 +1,43 @@
+#!/bin/bash
+
+ES_IMAGE="jcap/elasticsearch"
+
+ES_CONTAINER="elasticsearch"
+ES_DATA="elasticsearch-data"
+
+BASEIMAGE="alpine:latest"
+
+case $1 in
+build-image)
+  docker build --no-cache --pull -t ${ES_IMAGE} .
+  ;;
+create-data)
+  docker create --name ${ES_DATA} -v /usr/share/elasticsearch/data -u elasticsearch ${ES_IMAGE} /bin/true
+  ;;
+start-elasticsearch)
+  docker run --name ${ES_CONTAINER} -d \
+    --volumes-from ${ES_DATA}          \
+    -e "discovery.zen.minimum_master_nodes=1" \
+    --cap-add=IPC_LOCK                 \
+    --ulimit memlock=-1:-1             \
+    --ulimit nofile=65536:65536        \
+    --memory="2g"                      \
+    --restart=always                   \
+    ${ES_IMAGE}
+  ;;
+stop-elasticsearch)
+  docker stop ${ES_CONTAINER}
+  ;;
+shell)
+  docker run --rm --name ${ES_CONTAINER}-shell -u root -i -t ${ES_IMAGE} /bin/bash
+  ;;
+backup)
+  docker run --volumes-from ${ES_DATA} --rm ${BASEIMAGE} tar -cvf - -C /usr/share/elasticsearch data | xz > $2
+  ;;
+restore)
+  xzcat $2 | docker run --name ${ES_DATA} -v /usr/share/elasticsearch/data -i ${BASEIMAGE} tar -xvf - -C /usr/share/elasticsearch
+  ;;
+*)
+  echo "./gantry {build-image, create-data, start-elasticsearch, stop-elasticsearch, shell, backup, restore}"
+  ;;
+esac

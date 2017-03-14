@@ -1,0 +1,38 @@
+#!/bin/bash
+
+LOGSTASH_IMAGE="jcap/logstash"
+
+LOGSTASH_CONTAINER="logstash"
+LOGSTASH_DATA="logstash-data"
+
+BASEIMAGE="alpine:latest"
+
+case $1 in
+build-image)
+  docker build --no-cache --pull -t ${LOGSTASH_IMAGE} .
+  ;;
+create-data)
+  docker create --name ${LOGSTASH_DATA} -v /usr/share/elasticsearch/data -u elasticsearch ${LOGSTASH_IMAGE} /bin/true
+  ;;
+start-logstash)
+  docker run --name ${LOGSTASH_CONTAINER} -d \
+    --link="elasticsearch:elasticsearch" \
+    --restart=always                   \
+    ${LOGSTASH_IMAGE}
+  ;;
+stop-logstash)
+  docker stop ${LOGSTASH_CONTAINER}
+  ;;
+shell)
+  docker run --rm --name ${LOGSTASH_CONTAINER}-shell --link="elasticsearch:elasticsearch" -i -u root -t ${LOGSTASH_IMAGE} /bin/bash
+  ;;
+backup)
+  docker run --volumes-from ${LOGSTASH_DATA} --rm ${BASEIMAGE} tar -cvf - -C /usr/share/elasticsearch data | xz > $2
+  ;;
+restore)
+  xzcat $2 | docker run --name ${LOGSTASH_DATA} -v /usr/share/elasticsearch/data -i ${BASEIMAGE} tar -xvf - -C /usr/share/elasticsearch
+  ;;
+*)
+  echo "./gantry {build-image, create-data, start-logstash, stop-logstash, shell, backup, restore}"
+  ;;
+esac
