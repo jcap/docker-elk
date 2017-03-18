@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Run Kibana, using environment variables to set longopts defining Kibana's
+# Run Logstash, using environment variables to set longopts defining Logstash's
 # configuration.
 #
 # eg. Setting the environment variable:
 #
 #       ELASTICSEARCH_STARTUPTIMEOUT=60
 #
-# will cause Kibana to be invoked with:
+# will cause Logstash to be invoked with:
 #
 #       --elasticsearch.startupTimeout=60
 
