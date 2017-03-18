@@ -73,4 +73,14 @@ for kibana_var in ${kibana_vars[*]}; do
     fi
 done
 
+# wait for elasticsearch to respond
+set -e
+
+until curl -f -u $ELASTICSEARCH_USERNAME':'$ELASTICSEARCH_PASSWORD $ELASTICSEARCH_URL; do
+  >&2 echo "Elasticseach is unavailable - sleeping"
+  sleep 1
+done
+
+>&2 echo "Elasticsearch is up - starting kibana"
+
 exec /usr/share/kibana/bin/kibana ${longopts}
