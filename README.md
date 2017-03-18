@@ -22,7 +22,7 @@ Set your environment variables. These should be the only things you have to
 modify.
 
 ```shell
-mv elk.env.sampl elk.env
+mv elk.env.sample elk.env
 vim elk.env
 ```
 
