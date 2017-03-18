@@ -11,22 +11,16 @@
 #
 #       --elasticsearch.startupTimeout=60
 
+set -x
+
+sed -i 's~LOGSTASH_MONITORING_PASSWORD~'$LOGSTASH_MONITORING_PASSWORD'~g' \
+  /usr/share/logstash/config/logstash.yml
+
+sed -i 's~ELASTICSEARCH_URL~'$ELASTICSEARCH_URL'~g' \
+  /usr/share/logstash/config/logstash.yml
+
 logstash_vars=(
     http.host
-    xpack.monitoring.elasticsearch.url
-    xpack.monitoring.elasticsearch.username
-    xpack.monitoring.elasticsearch.password
-    xpack.monitoring.enabled
-    xpack.monitoring.max_bucket_size
-    xpack.monitoring.min_interval_seconds
-    xpack.monitoring.node_resolver
-    xpack.monitoring.report_stats
-    xpack.monitoring.ui.container.elasticsearch.enabled
-    xpack.security.enabled
-    xpack.security.encryptionKey
-    xpack.security.sessionTimeout
-    xpack.security.cookieName
-    xpack.security.secureCookies
 )
 
 longopts=''

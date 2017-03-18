@@ -32,6 +32,7 @@ RUN chmod a+x /usr/local/bin/logstash-docker
 
 # Provide a minimal configuration, so that simple invocations will provide a good experience.
 ADD etc/log4j2.properties /usr/share/logstash/config/
+ADD etc/logstash.yml /usr/share/logstash/config/
 ADD pipeline/default.conf /usr/share/logstash/pipeline/logstash.conf
 
 RUN set -ex && for esdirs in config pipeline; do \
