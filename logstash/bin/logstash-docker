@@ -11,8 +11,6 @@
 #
 #       --elasticsearch.startupTimeout=60
 
-set -x
-
 sed -i 's~LOGSTASH_MONITORING_PASSWORD~'$LOGSTASH_MONITORING_PASSWORD'~g' \
   /usr/share/logstash/config/logstash.yml
 
