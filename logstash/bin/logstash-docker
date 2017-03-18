@@ -35,4 +35,15 @@ for logstash_var in ${logstash_vars[*]}; do
     fi
 done
 
+# wait for elasticsearch to respond
+set -e
+
+until curl -f -u $ELASTICSEARCH_USERNAME':'$ELASTICSEARCH_PASSWORD $ELASTICSEARCH_URL; do
+  >&2 echo "Elasticseach is unavailable - sleeping"
+  sleep 1
+done
+
+>&2 echo "Elasticsearch is up - starting logstash"
+
+# start logstash
 exec /usr/share/logstash/bin/logstash -f /usr/share/logstash/pipeline/ ${longopts}
