@@ -1,11 +1,9 @@
 ---
 version: '3'
 services:
+
   elasticsearch:
     env_file: elk.env
-    # Equivalent to:
-    # docker run --rm --cap-add=IPC_LOCK --ulimit memlock=-1:-1 --ulimit nofile=65536:65536 -t -P --memory="2g" -e "discovery.zen.minimum_master_nodes=1" \ 
-    #   -v elasticsearch-data:/usr/share/elasticsearch/data jcap/elasticsearch
     build:
       context: elasticsearch
       args:
@@ -30,6 +28,7 @@ services:
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
     network_mode: "bridge"
+
   logstash:
     env_file: elk.env
     build:
@@ -46,6 +45,7 @@ services:
       - elasticsearch
     volumes:
       - /var/log:/mnt/hostlog
+
   kibana:
     env_file: elk.env
     build:
