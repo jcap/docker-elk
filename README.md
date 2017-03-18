@@ -16,6 +16,16 @@ Based heavily off the Dockerfiles distribrubted by
 [beats-docker](https://github.com/elastic/beats-docker) was later found and used
 to help refine a few pieces.
 
+### Configure
+
+Set your environment variables. These should be the only things you have to
+modify.
+
+```shell
+mv elk.env.sampl elk.env
+vim elk.env
+```
+
 ### Build
 
 ```shell
