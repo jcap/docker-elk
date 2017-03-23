@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# wait for elasticsearch to respond
+set -e
+  
+
+until curl -f -u $ELASTICSEARCH_USERNAME':'$ELASTICSEARCH_PASSWORD $ELASTICSEARCH_URL; do
+  >&2 echo "Elasticseach is unavailable - sleeping"
+  sleep 1
+done
+
+>&2 echo "Elasticsearch is up - starting filebeat"
+
+exec /usr/share/filebeat/filebeat -e \
+  -E output.elasticsearch.hosts='["'$ELASTICSEARCH_HOST':'$ELASTICSEARCH_PORT'"]' \
+  -E output.elasticsearch.username=$ELASTICSEARCH_USERNAME \
+  -E output.elasticsearch.password=$ELASTICSEARCH_PASSWORD
+
+
