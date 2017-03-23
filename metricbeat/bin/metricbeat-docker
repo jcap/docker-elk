@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# wait for elasticsearch to respond
+set -e
+  
+
+until curl -f -u $ELASTICSEARCH_USERNAME':'$ELASTICSEARCH_PASSWORD http://172.17.0.3:9200; do
+  >&2 echo "Elasticseach is unavailable - sleeping"
+  sleep 1
+done
+
+>&2 echo "Elasticsearch is up - starting metricbeat"
+
+exec /usr/share/metricbeat/metricbeat -system.hostfs=/hostfs -e 
+
