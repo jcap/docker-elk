@@ -71,5 +71,20 @@ services:
     #  - SERVER_SSL_CERT=/usr/share/kibana/config/kibana.example.org.crt
     #  - SERVER_SSL_KEY=/usr/share/kibana/config/kibana.example.org.key
 
+  metricbeat:
+    env_file: elk.env
+    build:
+      context: metricbeat
+      args:
+        ELASTIC_VERSION: "${ELASTIC_VERSION}"
+        METRICBEAT_DOWNLOAD_URL: "${METRICBEAT_DOWNLOAD_URL}"
+    image: "jcap/metricbeat"
+    network_mode: "host"
+    volumes:
+      - /proc:/hostfs/proc:ro
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /:/hostfs:ro
+
 volumes:
   elasticsearch-data:

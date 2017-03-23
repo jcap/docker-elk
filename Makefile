@@ -5,6 +5,7 @@ export ES_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/elasticsearch
 export LOGSTASH_PACK_URL=https://artifacts.elastic.co/downloads/logstash-plugins
 export LOGSTASH_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/logstash
 export KIBANA_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/kibana
+export METRICBEAT_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/beats
 
 all: build up
 
