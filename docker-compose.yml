@@ -75,14 +75,30 @@ services:
       context: metricbeat
       args:
         ELASTIC_VERSION: "${ELASTIC_VERSION}"
-        METRICBEAT_DOWNLOAD_URL: "${METRICBEAT_DOWNLOAD_URL}"
+        BEAT_DOWNLOAD_URL: "${BEAT_DOWNLOAD_URL}"
     image: "jcap/metricbeat"
     network_mode: "host"
     volumes:
       - /proc:/hostfs/proc:ro
       - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - /:/hostfs:ro
+  filebeat:
+    env_file: elk.env
+    build:
+      context: filebeat
+      args:
+        ELASTIC_VERSION: "${ELASTIC_VERSION}"
+        BEAT_DOWNLOAD_URL: "${BEAT_DOWNLOAD_URL}"
+    image: "jcap/filebeat"
+    network_mode: "bridge"
+    links:
+      - elasticsearch
+    depends_on:
+      - elasticsearch
+    volumes:
+      - /var/log:/var/log:ro
+
 
 volumes:
   elasticsearch-data:

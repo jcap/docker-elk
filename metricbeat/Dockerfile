@@ -2,12 +2,10 @@ FROM alpine:latest
 MAINTAINER John Cappiello <john@johncappiello.com>
 
 ARG ELASTIC_VERSION
-ARG METRICBEAT_DOWNLOAD_URL
+ARG BEAT_DOWNLOAD_URL
 
 ENV PATH /usr/share/metricbeat/bin:$PATH
 ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
-
-EXPOSE 5601
 
 WORKDIR /usr/share/metricbeat
 
