@@ -11,7 +11,7 @@ done
 
 >&2 echo "Elasticsearch is up - starting filebeat"
 
-exec /usr/share/filebeat/filebeat -e \
+exec /usr/share/filebeat/filebeat \
   -E output.elasticsearch.hosts='["'$ELASTICSEARCH_HOST':'$ELASTICSEARCH_PORT'"]' \
   -E output.elasticsearch.username=$ELASTICSEARCH_USERNAME \
   -E output.elasticsearch.password=$ELASTICSEARCH_PASSWORD

@@ -97,7 +97,8 @@ services:
     depends_on:
       - elasticsearch
     volumes:
-      - /var/log:/var/log:ro
+      - /var/log:/hostfs/var/log:ro
+      - /var/lib/docker:/hostfs/var/lib/docker:ro
 
 
 volumes:
