@@ -43,8 +43,6 @@ services:
       - elasticsearch
     depends_on:
       - elasticsearch
-    volumes:
-      - /var/log:/mnt/hostlog
 
   kibana:
     env_file: elk.env
