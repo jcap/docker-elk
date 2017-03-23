@@ -7,8 +7,6 @@ ARG METRICBEAT_DOWNLOAD_URL
 ENV PATH /usr/share/metricbeat/bin:$PATH
 ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
 
-RUN adduser -D -u 1000 -h /usr/share/metricbeat metricbeat
-
 EXPOSE 5601
 
 WORKDIR /usr/share/metricbeat
@@ -26,7 +24,6 @@ RUN set -ex && \
     EXPECTED_SHA=$(wget -O - ${METRICBEAT_DOWNLOAD_URL}/metricbeat/metricbeat-${ELASTIC_VERSION}-linux-x86_64.tar.gz.sha1) && \
     test $EXPECTED_SHA == $(sha1sum metricbeat-${ELASTIC_VERSION}-linux-x86_64.tar.gz | awk '{print $1}') && \
     tar zvxf metricbeat-${ELASTIC_VERSION}-linux-x86_64.tar.gz && \
-    chown -R metricbeat:metricbeat metricbeat-${ELASTIC_VERSION}-linux-x86_64 && \
     mv metricbeat-${ELASTIC_VERSION}-linux-x86_64/metricbeat . && \
     mv metricbeat-${ELASTIC_VERSION}-linux-x86_64/*.json . && \
     mv metricbeat-${ELASTIC_VERSION}-linux-x86_64/scripts . && \
@@ -43,9 +40,5 @@ RUN chmod a+x /usr/local/bin/metricbeat-docker
 ADD etc/metricbeat.yml /usr/share/metricbeat/
 RUN mkdir /usr/share/metricbeat/data
 RUN mkdir /usr/share/metricbeat/logs
-
-RUN chown -R metricbeat:metricbeat /usr/share/metricbeat
-
-#USER metricbeat
 
 CMD /usr/local/bin/metricbeat-docker
